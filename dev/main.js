@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-import BMComponent from '../dist/'
-import '../dist/style.css'
+import BMComponent from '../src/'
 
 Vue.use(BMComponent)
 
