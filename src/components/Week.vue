@@ -18,7 +18,6 @@
       </span>
     </transition-group>
     </div>
-    <div>当前选中日期{{curDay.formate}}</div>
     </v-touch>
 </template>
 
@@ -28,7 +27,7 @@ import VueTouch from 'vue-touch'
 
 Vue.use(VueTouch)
 export default {
-  name: 'week',
+  name: 'Week',
   data () {
     return {
       curWeeks: [],

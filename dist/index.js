@@ -1,4 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else {
+		var a = factory();
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -225,7 +235,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         'is-today': day.isToday
       }
     }, [_vm._v(_vm._s(day.day))])])])
-  }))], 1), _vm._v(" "), _c('div', [_vm._v("当前选中日期" + _vm._s(_vm.curDay.formate))])])
+  }))], 1)])
 },staticRenderFns: []}
 
 /***/ }),
@@ -9536,14 +9546,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_touch___default.a);
 /* harmony default export */ __webpack_exports__["default"] = {
-  name: 'week',
+  name: 'Week',
   data() {
     return {
       curWeeks: [],
@@ -12562,4 +12571,5 @@ if (typeof module === 'object' && module.exports) {
 
 /***/ })
 /******/ ]);
+});
 //# sourceMappingURL=index.js.map

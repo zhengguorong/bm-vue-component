@@ -56,7 +56,8 @@ if (process.env.NODE_ENV === 'production') {
 
   module.exports.output = {
     path:'./dist',
-    filename:'index.js'
+    filename:'index.js',
+    libraryTarget: 'umd'
   }
   module.exports.devtool = '#source-map'
   module.exports.module.rules[0].options.loaders = {
