@@ -1,0 +1,43 @@
+{
+  "name": "bm-vue-component",
+  "description": "bm业务组件",
+  "version": "1.0.0",
+  "author": "zhengguorong <zhengguorong@bluemoon.com.cn>",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --inline --hot",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhengguorong/bm-vue-component"
+  },
+  "main": "dist/index.js",
+  "dependencies": {
+    "vue": "^2.1.0",
+    "vue-touch": "^2.0.0-beta.4"
+  },
+  "devDependencies": {
+    "babel-core": "^6.0.0",
+    "babel-loader": "^6.0.0",
+    "babel-preset-es2015": "^6.0.0",
+    "cross-env": "^3.0.0",
+    "css-loader": "^0.25.0",
+    "extract-text-webpack-plugin": "^2.0.0-rc.3",
+    "file-loader": "^0.9.0",
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
+    "style-loader": "^0.13.1",
+    "vue-loader": "^10.0.0",
+    "vue-template-compiler": "^2.1.0",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.3.0"
+  },
+  "keywords": [
+    "vue",
+    "bluemoon"
+  ],
+  "bugs": {
+    "url": "https://github.com/zhengguorong/bm-vue-component/issues"
+  },
+  "homepage": "https://github.com/zhengguorong/bm-vue-component/"
+}
