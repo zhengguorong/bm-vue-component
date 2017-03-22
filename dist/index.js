@@ -90,7 +90,7 @@ var Component = __webpack_require__(3)(
   /* template */
   __webpack_require__(4),
   /* scopeId */
-  null,
+  "data-v-48f88735",
   /* cssModules */
   null
 )

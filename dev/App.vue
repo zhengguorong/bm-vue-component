@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <BMWeek @cur-week-changed="weekChanged"></BMWeek>
+  <div id="app" style="font-size:40px">
+    <BMWeek @cur-week-changed="weekChanged" style="font-size:40px"></BMWeek>
   </div>
 </template>
 
