@@ -1,19 +1,20 @@
 <template>
     <v-touch v-on:swipe="swipe">
     <div class="weeks">
-      <span class="item">日</span>
+      <span class="item hday">日</span>
       <span class="item">一</span>
       <span class="item">二</span>
       <span class="item">三</span>
       <span class="item">四</span>
       <span class="item">五</span>
-      <span class="item">六</span>
+      <span class="item hday">六</span>
     </div>
     <div class="dates">
     <transition-group name="list" tag="div" :css="false" @before-enter="beforeEnter" @enter="enter" @leave="leave">
-      <span class="item" v-for="day in curWeeks" v-bind:key="day" @click="setSelectedDay(day)">
-        <div class="date-num">
+      <span class="item" v-for="(day, index) in curWeeks" v-bind:key="day" @click="setSelectedDay(day)">
+        <div class="date-num" :class="{'hday': index === 0 || index === 6}">
           <div :class="{'is-today': day.isToday}">{{day.day}}</div>
+          <div v-if="day.event" class="event"></div>
         </div>
       </span>
     </transition-group>
@@ -33,6 +34,11 @@ export default {
   },
   mounted () {
     this.curWeeks = this.changeWeek('cur')
+  },
+  watch: {
+    curWeeks: function (val) {
+      this.$emit('cur-week-changed', val)
+    }
   },
   methods: {
     // 获取下一星期或者上一星期
@@ -55,7 +61,8 @@ export default {
           week: nextDate.getDay(),
           formate: formate,
           isToday: formate === (this.curDay.formate || `${new Date().getFullYear()}/${new Date().getMonth() + 1}/${new Date().getDate()}`),
-          time: nextDate.getTime()
+          time: nextDate.getTime(),
+          event: false
         }
         if (dateObj.isToday) {
           this.curDay = dateObj
@@ -98,29 +105,48 @@ export default {
 </script>
 
 <style>
-
-.weeks .item {
-  font-size: .7rem;
+.item {
+  font-size: 12px;
+}
+.hday {
+  color: #999;
+}
+.weeks {
+  line-height: 32px;
 }
 .weeks,.dates {
   text-align: center;
-  font-size: 1rem;
-  line-height: 50px;
+  font-size: 20px;
   width: 100%;
   overflow: hidden;
+  display: flex;
+}
+.dates .item {
+  line-height: 20px;
+}
+.dates>div {
+  display: flex;
+  width: 100%;
 }
 .weeks span,.dates span {
-  width:14.2%;
-  float: left;
-  line-height: 42px;
+  flex:1;
 }
 .is-today {
-  background: #f29543;
-  border: 1px solid #f29543;
+  background: #1EB8FF;
   border-radius: 50%;
   color: #fff;
-  width: 36px;
-  height: 36px;
-  margin: 0 auto;
+  width: 20px;
+  height: 20px;
+  margin:0 auto;
+}
+.is-today + .event {
+  background: #1EB8FF;
+}
+.event {
+  background: #999;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  margin: 2px auto 0 auto;
 }
 </style>

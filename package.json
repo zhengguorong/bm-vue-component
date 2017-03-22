@@ -1,7 +1,7 @@
 {
   "name": "bm-vue-component",
   "description": "bm业务组件",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "author": "zhengguorong <zhengguorong@bluemoon.com.cn>",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --inline --hot",

@@ -1,12 +1,17 @@
 <template>
   <div id="app">
-    <BMWeek></BMWeek>
+    <BMWeek @cur-week-changed="weekChanged"></BMWeek>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  methods: {
+    weekChanged (weeks) {
+      weeks[0].event = true
+    }
+  }
 }
 </script>
 
