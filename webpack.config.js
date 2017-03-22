@@ -55,7 +55,7 @@ if (process.env.NODE_ENV === 'production') {
   module.exports.entry = './src/index.js'
 
   module.exports.output = {
-    path:'./dist',
+    path:path.resolve(__dirname, './dist'),
     filename:'index.js',
     libraryTarget: 'umd'
   }
