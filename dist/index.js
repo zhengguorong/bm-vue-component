@@ -3227,8 +3227,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         lastDay = lastDay.getTime();
       } else if (action === 'next') {
         lastDay = this.curWeeks[6].time;
-      } else {
+      } else if (action === 'pre') {
         lastDay = this.curWeeks[0].time - 8 * 24 * 3600 * 1000;
+      } else {
+        // 传递日期 2017/3/14
+        let toDate = new Date(action);
+        toDate.setDate(toDate.getDate() - toDate.getDay() - 1); // 设置本周第一天
+        lastDay = toDate.getTime();
       }
       let weeks = [];
       for (var i = 1; i <= 7; i++) {
@@ -3248,6 +3253,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         weeks.push(dateObj);
       }
       return weeks;
+    },
+    toDate(date) {
+      // 判断目标日期是否在本周内
+      let targe = this.curWeeks.find(n => {
+        return n.formate === date;
+      });
+      if (targe) {
+        this.setSelectedDay(targe);
+      } else {
+        // 切换周再设置选中日期
+        this.curWeeks = this.changeWeek(date);
+        this.curWeeks.find(n => {
+          if (n.formate === date) this.setSelectedDay(n);
+        });
+      }
     },
     setSelectedDay(day) {
       this.$emit('cur-day-changed', day);

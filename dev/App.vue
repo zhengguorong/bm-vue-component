@@ -1,6 +1,7 @@
 <template>
   <div id="app" style="font-size:40px">
-    <BMWeek @cur-week-changed="weekChanged" style="font-size:40px"></BMWeek>
+    <BMWeek ref="week" @cur-week-changed="weekChanged" style="font-size:40px"></BMWeek>
+    <div @click="toDate">选中指定日期</div>
   </div>
 </template>
 
@@ -10,6 +11,9 @@ export default {
   methods: {
     weekChanged (weeks) {
       weeks[0].event = true
+    },
+    toDate (time) {
+      this.$refs['week'].toDate('2017/3/18')
     }
   }
 }
