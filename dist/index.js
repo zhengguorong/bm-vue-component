@@ -373,9 +373,10 @@ if (true) {
 /* 2 */
 /***/ (function(module, exports) {
 
-module.exports = function(originalModule) {
-	if(!originalModule.webpackPolyfill) {
-		var module = Object.create(originalModule);
+module.exports = function(module) {
+	if(!module.webpackPolyfill) {
+		module.deprecate = function() {};
+		module.paths = [];
 		// module.parent = undefined by default
 		if(!module.children) module.children = [];
 		Object.defineProperty(module, "loaded", {
@@ -389,9 +390,6 @@ module.exports = function(originalModule) {
 			get: function() {
 				return module.i;
 			}
-		});
-		Object.defineProperty(module, "exports", {
-			enumerable: true,
 		});
 		module.webpackPolyfill = 1;
 	}
@@ -3172,10 +3170,14 @@ if (true) {
 
 /***/ }),
 /* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 //
 //
 //
@@ -3201,27 +3203,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-/* harmony default export */ __webpack_exports__["default"] = ({
+exports.default = {
   name: 'Week',
-  data() {
+  data: function data() {
     return {
       curWeeks: [],
       curDay: {},
       action: 'cur'
     };
   },
-  mounted() {
+  mounted: function mounted() {
     this.curWeeks = this.changeWeek('cur');
   },
+
   watch: {
-    curWeeks: function (val) {
+    curWeeks: function curWeeks(val) {
       this.$emit('cur-week-changed', val);
     }
   },
   methods: {
     // 获取下一星期或者上一星期
-    changeWeek(action) {
-      let lastDay = new Date();
+    changeWeek: function changeWeek(action) {
+      var lastDay = new Date();
       if (action === 'cur') {
         lastDay.setDate(lastDay.getDate() - lastDay.getDay() - 1);
         lastDay = lastDay.getTime();
@@ -3231,19 +3234,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         lastDay = this.curWeeks[0].time - 8 * 24 * 3600 * 1000;
       } else {
         // 传递日期 2017/3/14
-        let toDate = new Date(action);
+        var toDate = new Date(action);
         toDate.setDate(toDate.getDate() - toDate.getDay() - 1); // 设置本周第一天
         lastDay = toDate.getTime();
       }
-      let weeks = [];
+      var weeks = [];
       for (var i = 1; i <= 7; i++) {
-        let nextDate = new Date(lastDay + i * 24 * 3600 * 1000);
-        let formate = `${nextDate.getFullYear()}/${nextDate.getMonth() + 1}/${nextDate.getDate()}`;
-        let dateObj = {
+        var nextDate = new Date(lastDay + i * 24 * 3600 * 1000);
+        var formate = nextDate.getFullYear() + '/' + (nextDate.getMonth() + 1) + '/' + nextDate.getDate();
+        var dateObj = {
           day: nextDate.getDate(),
           week: nextDate.getDay(),
           formate: formate,
-          isToday: formate === (this.curDay.formate || `${new Date().getFullYear()}/${new Date().getMonth() + 1}/${new Date().getDate()}`),
+          isToday: formate === (this.curDay.formate || new Date().getFullYear() + '/' + (new Date().getMonth() + 1) + '/' + new Date().getDate()),
           time: nextDate.getTime(),
           event: false
         };
@@ -3254,9 +3257,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
       return weeks;
     },
-    toDate(date) {
+    toDate: function toDate(date) {
+      var _this = this;
+
       // 判断目标日期是否在本周内
-      let targe = this.curWeeks.find(n => {
+      var targe = this.curWeeks.find(function (n) {
         return n.formate === date;
       });
       if (targe) {
@@ -3264,18 +3269,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       } else {
         // 切换周再设置选中日期
         this.curWeeks = this.changeWeek(date);
-        this.curWeeks.find(n => {
-          if (n.formate === date) this.setSelectedDay(n);
+        this.curWeeks.find(function (n) {
+          if (n.formate === date) _this.setSelectedDay(n);
         });
       }
     },
-    setSelectedDay(day) {
+    setSelectedDay: function setSelectedDay(day) {
       this.$emit('cur-day-changed', day);
       this.curDay.isToday = false;
       day.isToday = true;
       this.curDay = day;
     },
-    swipe(e) {
+    swipe: function swipe(e) {
       if (e.deltaX > 0) {
         this.curWeeks = this.changeWeek('pre');
         this.action = 'pre';
@@ -3284,49 +3289,60 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.curWeeks = this.changeWeek('next');
       }
     },
-    beforeEnter(el, done) {
+    beforeEnter: function beforeEnter(el, done) {
       el.style.opacity = 0;
-      el.style.transform = `translateX(${this.action === 'next' ? 50 : -50}px)`;
+      el.style.transform = 'translateX(' + (this.action === 'next' ? 50 : -50) + 'px)';
       el.style.transition = 'all .5s';
     },
-    enter(el, done) {
-      setTimeout(() => {
+    enter: function enter(el, done) {
+      setTimeout(function () {
         el.style.opacity = 1;
         el.style.transform = 'translateX(0px)';
       }, 0);
     },
-    leave(el, done) {
+    leave: function leave(el, done) {
       el.style.display = 'none';
     }
   }
-});
+};
 
 /***/ }),
 /* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(module) {Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Week_vue__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Week_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_Week_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_touch__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_touch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_touch__);
+/* WEBPACK VAR INJECTION */(function(module) {
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
+var _Week = __webpack_require__(0);
 
+var _Week2 = _interopRequireDefault(_Week);
 
-function install(Vue, options = {}) {
-  Vue.use(__WEBPACK_IMPORTED_MODULE_1_vue_touch___default.a);
-  Vue.component('BMWeek', __WEBPACK_IMPORTED_MODULE_0__components_Week_vue___default.a);
+var _vueTouch = __webpack_require__(1);
+
+var _vueTouch2 = _interopRequireDefault(_vueTouch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function install(Vue) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  Vue.use(_vueTouch2.default);
+  Vue.component('BMWeek', _Week2.default);
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (install);
+exports.default = install;
 
-if (typeof module === 'object' && module.exports) {
+
+if (( false ? 'undefined' : _typeof(module)) === 'object' && module.exports) {
   module.exports.install = install;
 }
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
 
 /***/ })
 /******/ ]);
