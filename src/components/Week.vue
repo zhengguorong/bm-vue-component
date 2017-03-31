@@ -150,6 +150,7 @@ export default {
 }
 .weeks span,.dates span {
   flex:1;
+  display: block;
 }
 .is-today {
   background: #1EB8FF;
