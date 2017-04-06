@@ -73,22 +73,97 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  scopeId,
+  cssModules
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  // inject cssModules
+  if (cssModules) {
+    var computed = options.computed || (options.computed = {})
+    Object.keys(cssModules).forEach(function (key) {
+      var module = cssModules[key]
+      computed[key] = function () { return module }
+    })
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(6)
+__webpack_require__(8)
 
-var Component = __webpack_require__(3)(
+var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(7),
+  __webpack_require__(10),
   /* template */
-  __webpack_require__(4),
+  __webpack_require__(5),
+  /* scopeId */
+  "data-v-37f89e02",
+  /* cssModules */
+  null
+)
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(9)
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(11),
+  /* template */
+  __webpack_require__(6),
   /* scopeId */
   "data-v-48f88735",
   /* cssModules */
@@ -99,11 +174,11 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 1 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
-   true ? factory(__webpack_require__(5)) :
+   true ? factory(__webpack_require__(7)) :
   typeof define === 'function' && define.amd ? define(['hammerjs'], factory) :
   (factory(global.Hammer));
 }(this, (function (Hammer) { 'use strict';
@@ -370,7 +445,7 @@ if (true) {
 
 
 /***/ }),
-/* 2 */
+/* 4 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -398,60 +473,89 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, exports) {
 
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  scopeId,
-  cssModules
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  // inject cssModules
-  if (cssModules) {
-    var computed = options.computed || (options.computed = {})
-    Object.keys(cssModules).forEach(function (key) {
-      var module = cssModules[key]
-      computed[key] = function () { return module }
-    })
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
-
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-touch', {
+    on: {
+      "swipe": _vm.swipe
+    }
+  }, [_c('div', {
+    staticClass: "header"
+  }, [_c('div', {
+    staticClass: "left",
+    on: {
+      "click": _vm.toPreMonth
+    }
+  }, [_vm._v("<")]), _vm._v(" "), _c('div', {
+    staticClass: "title"
+  }, [_vm._v(_vm._s(_vm.calendar.year) + " 年 " + _vm._s(_vm.calendar.month) + " 月")]), _vm._v(" "), _c('div', {
+    staticClass: "right",
+    on: {
+      "click": _vm.toNextMonth
+    }
+  }, [_vm._v(">")])]), _vm._v(" "), _c('div', {
+    staticClass: "weeks"
+  }, [_c('span', {
+    staticClass: "item hday"
+  }, [_vm._v("日")]), _vm._v(" "), _c('span', {
+    staticClass: "item"
+  }, [_vm._v("一")]), _vm._v(" "), _c('span', {
+    staticClass: "item"
+  }, [_vm._v("二")]), _vm._v(" "), _c('span', {
+    staticClass: "item"
+  }, [_vm._v("三")]), _vm._v(" "), _c('span', {
+    staticClass: "item"
+  }, [_vm._v("四")]), _vm._v(" "), _c('span', {
+    staticClass: "item"
+  }, [_vm._v("五")]), _vm._v(" "), _c('span', {
+    staticClass: "item hday"
+  }, [_vm._v("六")])]), _vm._v(" "), _c('div', {
+    staticClass: "dates"
+  }, [_c('transition-group', {
+    attrs: {
+      "name": "list",
+      "tag": "div",
+      "css": false
+    },
+    on: {
+      "before-enter": _vm.beforeEnter,
+      "enter": _vm.enter,
+      "leave": _vm.leave
+    }
+  }, _vm._l((_vm.dayList), function(day, index) {
+    return _c('span', {
+      key: day,
+      staticClass: "item",
+      on: {
+        "click": function($event) {
+          _vm.setSelectedDay(day)
+        }
+      }
+    }, [_c('div', {
+      staticClass: "date-num",
+      class: {
+        'hday': day.week === 6 || day.week === 0
+      }
+    }, [_c('div', {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: (day.status),
+        expression: "day.status"
+      }],
+      class: {
+        'is-today': day.isToday
+      }
+    }, [_vm._v(_vm._s(day.day))]), _vm._v(" "), (day.event) ? _c('div', {
+      staticClass: "event"
+    }) : _vm._e()])])
+  }))], 1)])
+},staticRenderFns: []}
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -513,7 +617,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 },staticRenderFns: []}
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/*! Hammer.JS - v2.0.7 - 2016-04-22
@@ -3163,13 +3267,170 @@ if (true) {
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 7 */
+/* 9 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+  name: 'Calendar',
+  data: function data() {
+    return {
+      dayList: [],
+      curDay: {},
+      action: 'cur' // 用来记录手势，是前进还是后退，以便完成动画
+    };
+  },
+
+  props: {
+    calendar: {
+      type: Object,
+      required: true,
+      default: {
+        year: new Date().getFullYear(),
+        month: new Date().getMonth() + 1
+      }
+    }
+  },
+  mounted: function mounted() {
+    this.dayList = this.getDayList(this.calendar.year, this.calendar.month);
+  },
+
+  methods: {
+    getDayList: function getDayList(year, month) {
+      console.log(month);
+      // 计算1号时间戳
+      var firstDay = new Date(year + '/' + month + '/01');
+      var startTimestamp = firstDay - 1000 * 60 * 60 * 24 * firstDay.getDay(); // 减去当前1号所在星期的天数
+      var item = void 0,
+          status = void 0,
+          tempArr = [],
+          tempItem = void 0,
+          now = new Date();
+      for (var i = 0; i < 42; i++) {
+        item = new Date(startTimestamp + i * 1000 * 60 * 60 * 24);
+        if (parseInt(month) === item.getMonth() + 1) {
+          status = 1;
+        } else {
+          status = 0;
+        }
+        var formate = item.getFullYear() + '/' + (item.getMonth() + 1) + '/' + item.getDate();
+        tempItem = {
+          formate: item.getFullYear() + '/' + (item.getMonth() + 1) + '/' + item.getDate(),
+          day: item.getDate(),
+          week: item.getDay(),
+          time: item.getTime(),
+          isToday: formate === (this.curDay.formate || now.getFullYear() + '/' + (now.getMonth() + 1) + '/' + now.getDate()),
+          status: status,
+          event: false
+        };
+        if (tempItem.isToday) {
+          this.curDay = tempItem;
+        }
+        tempArr.push(tempItem);
+      }
+      return tempArr;
+    },
+    setSelectedDay: function setSelectedDay(day) {
+      this.$emit('cur-day-changed', day);
+      this.curDay.isToday = false;
+      day.isToday = true;
+      this.curDay = day;
+    },
+    toNextMonth: function toNextMonth() {
+      if (this.calendar.month === 12) {
+        this.calendar.year = parseInt(this.calendar.year) + 1;
+        this.calendar.month = 1;
+      } else {
+        this.calendar.month = parseInt(this.calendar.month) + 1;
+      }
+      this.action = 'next';
+      this.dayList = this.getDayList(this.calendar.year, this.calendar.month);
+      this.$emit('cur-month-changed', this.calendar.year + '/' + this.calendar.month + '/01');
+    },
+    toPreMonth: function toPreMonth() {
+      if (this.calendar.month === 1) {
+        this.calendar.year = parseInt(this.calendar.year) - 1;
+        this.calendar.month = 12;
+      } else {
+        this.calendar.month = parseInt(this.calendar.month) - 1;
+      }
+      this.action = 'pre';
+      this.dayList = this.getDayList(this.calendar.year, this.calendar.month);
+      this.$emit('cur-month-changed', this.calendar.year + '/' + this.calendar.month + '/01');
+    },
+    swipe: function swipe(e) {
+      if (e.deltaX > 0) {
+        this.toPreMonth();
+      } else {
+        this.toNextMonth();
+      }
+    },
+    beforeEnter: function beforeEnter(el, done) {
+      el.style.opacity = 0;
+      el.style.transform = 'translateX(' + (this.action === 'next' ? 50 : -50) + 'px)';
+      el.style.transition = 'all .5s';
+    },
+    enter: function enter(el, done) {
+      setTimeout(function () {
+        el.style.opacity = 1;
+        el.style.transform = 'translateX(0px)';
+      }, 0);
+    },
+    leave: function leave(el, done) {
+      el.style.display = 'none';
+    }
+  }
+};
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3307,7 +3568,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 8 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3319,11 +3580,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _Week = __webpack_require__(0);
+var _Week = __webpack_require__(2);
 
 var _Week2 = _interopRequireDefault(_Week);
 
-var _vueTouch = __webpack_require__(1);
+var _Calendar = __webpack_require__(1);
+
+var _Calendar2 = _interopRequireDefault(_Calendar);
+
+var _vueTouch = __webpack_require__(3);
 
 var _vueTouch2 = _interopRequireDefault(_vueTouch);
 
@@ -3334,6 +3599,7 @@ function install(Vue) {
 
   Vue.use(_vueTouch2.default);
   Vue.component('BMWeek', _Week2.default);
+  Vue.component('BMCalendar', _Calendar2.default);
 }
 
 exports.default = install;
@@ -3342,7 +3608,7 @@ exports.default = install;
 if (( false ? 'undefined' : _typeof(module)) === 'object' && module.exports) {
   module.exports.install = install;
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ })
 /******/ ]);
