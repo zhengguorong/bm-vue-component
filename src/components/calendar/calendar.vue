@@ -19,7 +19,7 @@
       <span class="item" v-for="(day, index) in dayList" v-bind:key="day" @click="setSelectedDay(day)">
         <div class="date-num" :class="{'hday': day.week === 6 || day.week === 0}">
           <div :class="{'is-today': day.isToday}" v-show="day.status">{{day.day}}</div>
-          <div v-if="day.event" class="event"></div>
+          <div v-if="day.event && day.status" class="event"></div>
         </div>
       </span>
     </transition-group>
@@ -44,7 +44,29 @@ export default {
       default: function () {
         return {
           year: new Date().getFullYear(),
-          month: new Date().getMonth() + 1
+          month: new Date().getMonth() + 1,
+          day: new Date().getDate()
+        }
+      }
+    },
+    events : {
+      type: Array,
+      require: false
+    }
+  },
+  watch: {
+    events (newEvents) {
+      // 设置小黑点
+      // 先把原有的小黑点清除
+      this.dayList.forEach((value) => {
+        value.event = false
+      })
+      for (let event of newEvents) {
+        for (let day of this.dayList) {
+          if (day.formate === event) {
+            day.event = true
+            break
+          }
         }
       }
     }
@@ -66,14 +88,17 @@ export default {
             status = 0
           }
           let formate = `${item.getFullYear()}/${item.getMonth()+1}/${item.getDate()}`
+          let index = this.events.findIndex((value, index) => {
+            return value === formate
+          })
           tempItem = {
             formate: `${item.getFullYear()}/${item.getMonth()+1}/${item.getDate()}`,
             day: item.getDate(),
             week: item.getDay(),
             time: item.getTime(),
-            isToday: formate === (this.curDay.formate || `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}`),
+            isToday: formate === (this.curDay.formate || `${this.calendar.year}/${this.calendar.month}/${this.calendar.day}`),
             status: status,
-            event: false
+            event: index > -1 ? true : false
           }
           if (tempItem.isToday) {
             this.curDay = tempItem

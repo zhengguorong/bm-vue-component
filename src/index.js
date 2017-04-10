@@ -1,7 +1,7 @@
 'use strict'
 
-import BMWeek from './components/Week.vue'
-import Calendar from './components/Calendar.vue'
+import BMWeek from './components/week/week.vue'
+import Calendar from './components/calendar/calendar.vue'
 import VueTouch from 'vue-touch'
 
 function install (Vue, options = {}) {
