@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  name: 'Calendar',
+  name: 'bm-calendar',
   data () {
     return {
       dayList: [],
@@ -40,10 +40,12 @@ export default {
   props: {
     calendar: {
       type: Object,
-      required: true,
-      default: {
-        year: new Date().getFullYear(),
-        month: new Date().getMonth() + 1
+      required: false,
+      default: function () {
+        return {
+          year: new Date().getFullYear(),
+          month: new Date().getMonth() + 1
+        }
       }
     }
   },
@@ -52,7 +54,6 @@ export default {
   },
   methods: {
     getDayList(year, month) {
-      console.log(month)
       // 计算1号时间戳
       let firstDay = new Date(year + '/' + month + '/01')
       let startTimestamp = firstDay-1000*60*60*24*firstDay.getDay() // 减去当前1号所在星期的天数

@@ -6,8 +6,8 @@ import VueTouch from 'vue-touch'
 
 function install (Vue, options = {}) {
   Vue.use(VueTouch)
-  Vue.component('BMWeek', BMWeek)
-  Vue.component('BMCalendar', Calendar)
+  Vue.component(BMWeek.name, BMWeek)
+  Vue.component(Calendar.name, Calendar)
 }
 
 export default install

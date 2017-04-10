@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: 'Week',
+  name: 'BMWeek',
   data () {
     return {
       curWeeks: [],

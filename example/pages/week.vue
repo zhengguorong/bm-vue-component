@@ -1,0 +1,3 @@
+<template>
+	<BMWeek></BMWeek>
+</template>
