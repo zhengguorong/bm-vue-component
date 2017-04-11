@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="nav">
+      <div class="left" @click="goback"><</div>
+    </div>
     <router-view></router-view>
   </div>
 </template>
@@ -8,7 +11,9 @@
 export default {
   name: 'app',
   methods: {
-
+    goback () {
+      this.$router.go(-1)
+    }
   }
 }
 </script>
@@ -16,6 +21,17 @@ export default {
 <style>
 body {
   margin: 0 0;
+  background: #fff;
+}
+.nav {
+  height: 44px;
+}
+.nav .left {
+  float: left;
+  font-size: 20px;
+  width:20%;
+  padding-left:10px;
+  line-height: 44px;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

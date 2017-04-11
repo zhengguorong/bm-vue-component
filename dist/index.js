@@ -143,7 +143,7 @@ var Component = __webpack_require__(0)(
   /* template */
   __webpack_require__(11),
   /* scopeId */
-  "data-v-37f89e02",
+  "data-v-3574061e",
   /* cssModules */
   null
 )
@@ -165,7 +165,7 @@ var Component = __webpack_require__(0)(
   /* template */
   __webpack_require__(12),
   /* scopeId */
-  "data-v-48f88735",
+  "data-v-625c2144",
   /* cssModules */
   null
 )
@@ -529,8 +529,74 @@ exports.default = {
       default: function _default() {
         return {
           year: new Date().getFullYear(),
-          month: new Date().getMonth() + 1
+          month: new Date().getMonth() + 1,
+          day: new Date().getDate()
         };
+      }
+    },
+    events: {
+      type: Array,
+      require: false,
+      default: function _default() {
+        return [];
+      }
+    }
+  },
+  watch: {
+    events: function events(newEvents) {
+      // 设置小黑点
+      // 先把原有的小黑点清除
+      this.dayList.forEach(function (value) {
+        value.event = false;
+      });
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = newEvents[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var event = _step.value;
+          var _iteratorNormalCompletion2 = true;
+          var _didIteratorError2 = false;
+          var _iteratorError2 = undefined;
+
+          try {
+            for (var _iterator2 = this.dayList[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              var day = _step2.value;
+
+              if (day.formate === event) {
+                day.event = true;
+                break;
+              }
+            }
+          } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                _iterator2.return();
+              }
+            } finally {
+              if (_didIteratorError2) {
+                throw _iteratorError2;
+              }
+            }
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
       }
     }
   },
@@ -540,6 +606,8 @@ exports.default = {
 
   methods: {
     getDayList: function getDayList(year, month) {
+      var _this = this;
+
       // 计算1号时间戳
       var firstDay = new Date(year + '/' + month + '/01');
       var startTimestamp = firstDay - 1000 * 60 * 60 * 24 * firstDay.getDay(); // 减去当前1号所在星期的天数
@@ -548,7 +616,8 @@ exports.default = {
           tempArr = [],
           tempItem = void 0,
           now = new Date();
-      for (var i = 0; i < 42; i++) {
+
+      var _loop = function _loop(i) {
         item = new Date(startTimestamp + i * 1000 * 60 * 60 * 24);
         if (parseInt(month) === item.getMonth() + 1) {
           status = 1;
@@ -556,24 +625,31 @@ exports.default = {
           status = 0;
         }
         var formate = item.getFullYear() + '/' + (item.getMonth() + 1) + '/' + item.getDate();
+        var index = _this.events.findIndex(function (value, index) {
+          return value === formate;
+        });
         tempItem = {
           formate: item.getFullYear() + '/' + (item.getMonth() + 1) + '/' + item.getDate(),
           day: item.getDate(),
           week: item.getDay(),
           time: item.getTime(),
-          isToday: formate === (this.curDay.formate || now.getFullYear() + '/' + (now.getMonth() + 1) + '/' + now.getDate()),
+          isToday: formate === (_this.curDay.formate || _this.calendar.year + '/' + _this.calendar.month + '/' + _this.calendar.day),
           status: status,
-          event: false
+          event: index > -1 ? true : false
         };
         if (tempItem.isToday) {
-          this.curDay = tempItem;
+          _this.curDay = tempItem;
         }
         tempArr.push(tempItem);
+      };
+
+      for (var i = 0; i < 42; i++) {
+        _loop(i);
       }
       return tempArr;
     },
     setSelectedDay: function setSelectedDay(day) {
-      this.$emit('cur-day-changed', day);
+      this.$emit('cur-day-changed', day.formate);
       this.curDay.isToday = false;
       day.isToday = true;
       this.curDay = day;
@@ -775,13 +851,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _Week = __webpack_require__(2);
+var _week = __webpack_require__(2);
 
-var _Week2 = _interopRequireDefault(_Week);
+var _week2 = _interopRequireDefault(_week);
 
-var _Calendar = __webpack_require__(1);
+var _calendar = __webpack_require__(1);
 
-var _Calendar2 = _interopRequireDefault(_Calendar);
+var _calendar2 = _interopRequireDefault(_calendar);
 
 var _vueTouch = __webpack_require__(3);
 
@@ -793,8 +869,8 @@ function install(Vue) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
   Vue.use(_vueTouch2.default);
-  Vue.component(_Week2.default.name, _Week2.default);
-  Vue.component(_Calendar2.default.name, _Calendar2.default);
+  Vue.component(_week2.default.name, _week2.default);
+  Vue.component(_calendar2.default.name, _calendar2.default);
 }
 
 exports.default = install;
@@ -3543,7 +3619,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       class: {
         'is-today': day.isToday
       }
-    }, [_vm._v(_vm._s(day.day))]), _vm._v(" "), (day.event) ? _c('div', {
+    }, [_vm._v(_vm._s(day.day))]), _vm._v(" "), (day.event && day.status) ? _c('div', {
       staticClass: "event"
     }) : _vm._e()])])
   }))], 1)])

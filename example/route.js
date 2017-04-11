@@ -1,4 +1,4 @@
-import Demo from './demos.vue'
+import Demo from './pages/index.vue'
 import Week from './pages/week.vue'
 import Calendar from './pages/calendar.vue'
 export default [

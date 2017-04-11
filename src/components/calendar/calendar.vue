@@ -51,7 +51,8 @@ export default {
     },
     events : {
       type: Array,
-      require: false
+      require: false,
+      default: () => []
     }
   },
   watch: {
@@ -108,7 +109,7 @@ export default {
       return tempArr    
     },
     setSelectedDay (day) {
-      this.$emit('cur-day-changed', day)
+      this.$emit('cur-day-changed', day.formate)
       this.curDay.isToday = false
       day.isToday = true
       this.curDay = day
