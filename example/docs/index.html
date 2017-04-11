@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>蓝月亮UI使用文档</title>
+  <link rel="stylesheet" href="./github-markdown.css">
   <style>
     html,body {
       height: 100%;
@@ -37,6 +38,7 @@
     }
     .document {
       float: left;
+      width: 50%;
       height: 100%;
     }
     .demo {
@@ -66,19 +68,33 @@
 <body>
   <div class="category">
     <ul>
-      <li><a href="">日历选择器(calendar)</a></li>
-      <li><a href="">周选择器(week)</a></li>
+      <li><a href="#calendar">日历选择器(calendar)</a></li>
+      <li><a href="#week">周选择器(week)</a></li>
     </ul>
   </div>
   <div class="document">
-    <div>23424s</div>
   </div>
   <div class="demo">
     <div class="wrap">
       <div class="phone">
-        <iframe class="demo-page" src="../index.html" frameborder="0"></iframe>
+        <iframe class="demo-page" src="../index.html#/" frameborder="0"></iframe>
       </div>
     </div>
   </div>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.3/showdown.min.js"></script>
+  <script>
+    $(window).bind('hashchange', function() {
+      // 改变demo路由
+      var hash = location.hash.substring(1);
+      $(".demo-page").attr("src","../index.html#"+hash)
+      // 获取markdown内容
+      $.get(hash + '.md',function(data) {
+        var converter = new showdown.Converter({tables: true})
+        var html = converter.makeHtml(data);
+        $(".document").html(html)
+      })
+    });
+  </script>
 </body>
 </html>
