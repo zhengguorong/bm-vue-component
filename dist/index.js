@@ -611,7 +611,7 @@ exports.default = {
 
       // 计算1号时间戳
       var firstDay = new Date(year + '/' + month + '/01');
-      var startTimestamp = firstDay - 1000 * 60 * 60 * 24 * firstDay.getDay(); // 减去当前1号所在星期的天数
+      var startTimestamp = firstDay - 1000 * 60 * 60 * 24 * firstDay.getDay();
       var item = void 0,
           status = void 0,
           tempArr = [],
@@ -662,7 +662,7 @@ exports.default = {
 
       // 判断目标日期是否在本月内
       var targe = this.dayList.find(function (n) {
-        return n.formate === date;
+        return n.formate === date && n.status === 1;
       });
       if (targe) {
         this.setSelectedDay(targe);
