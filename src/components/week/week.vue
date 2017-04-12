@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: 'BMWeek',
+  name: 'bm-week',
   data () {
     return {
       curWeeks: [],
@@ -32,22 +32,55 @@ export default {
       action: 'cur'
     }
   },
+  props: {
+    // 默认选中日期
+    calendar: {
+      type: Object,
+      required: false,
+      default: function () {
+        return {
+          year: new Date().getFullYear(),
+          month: new Date().getMonth() + 1,
+          day: new Date().getDate()
+        }
+      }
+    },
+    // 事件提醒小黑点
+    events : {
+      type: Array,
+      require: false,
+      default: () => []
+    }
+  },
   mounted () {
-    this.curWeeks = this.changeWeek('cur')
+    this.curWeeks = this.getDayList(this.calendar.year + '/' + this.calendar.month + '/' + this.calendar.day)
+    this.$emit('cur-day-changed', this.calendar.year + '/' + this.calendar.month + '/' + this.calendar.day)
   },
   watch: {
     curWeeks: function (val) {
-      this.$emit('cur-week-changed', val)
+      this.$emit('cur-week-changed', val[0].formate)
+    },
+    events (newEvents) {
+      // 设置小黑点
+      // 先把原有的小黑点清除
+      this.curWeeks.forEach((value) => {
+        value.event = false
+      })
+      for (let event of newEvents) {
+        for (let day of this.curWeeks) {
+          if (day.formate === event) {
+            day.event = true
+            break
+          }
+        }
+      }
     }
   },
   methods: {
     // 获取下一星期或者上一星期
-    changeWeek (action) {
-      let lastDay = new Date()
-      if (action === 'cur') {
-        lastDay.setDate(lastDay.getDate() - lastDay.getDay() - 1)
-        lastDay = lastDay.getTime()
-      } else if (action === 'next') {
+    getDayList (action) {
+      let lastDay
+      if (action === 'next') {
         lastDay = this.curWeeks[6].time
       } else if (action === 'pre'){
         lastDay = this.curWeeks[0].time - 8 * 24 * 3600 * 1000
@@ -61,13 +94,16 @@ export default {
       for (var i = 1; i <= 7; i++) {
         let nextDate = new Date(lastDay + i * 24 * 3600 * 1000)
         let formate = `${nextDate.getFullYear()}/${nextDate.getMonth() + 1}/${nextDate.getDate()}`
+        let index = this.events.findIndex((value, index) => {
+          return value === formate
+        })
         let dateObj = {
           day: nextDate.getDate(),
           week: nextDate.getDay(),
           formate: formate,
-          isToday: formate === (this.curDay.formate || `${new Date().getFullYear()}/${new Date().getMonth() + 1}/${new Date().getDate()}`),
+          isToday: formate === (this.curDay.formate || `${this.calendar.year}/${this.calendar.month}/${this.calendar.day}`),
           time: nextDate.getTime(),
-          event: false
+          event: index > -1 ? true : false
         }
         if (dateObj.isToday) {
           this.curDay = dateObj
@@ -85,25 +121,31 @@ export default {
         this.setSelectedDay(targe)
       } else {
         // 切换周再设置选中日期
-        this.curWeeks = this.changeWeek(date)
+        this.curWeeks = this.getDayList(date)
         this.curWeeks.find( n => {
           if (n.formate === date) this.setSelectedDay(n)
         })
       }
     },
     setSelectedDay (day) {
-      this.$emit('cur-day-changed', day)
+      this.$emit('cur-day-changed', day.formate || day)
       this.curDay.isToday = false
       day.isToday = true
       this.curDay = day
     },
+    toNextWeek () {
+      this.action = 'next'
+      this.curWeeks = this.getDayList('next')
+    },
+    toPreWeek () {
+      this.curWeeks = this.getDayList('pre')
+      this.action = 'pre'
+    },
     swipe (e) {
       if (e.deltaX > 0) {
-        this.curWeeks = this.changeWeek('pre')
-        this.action = 'pre'
+        this.toPreWeek()
       } else {
-        this.action = 'next'
-        this.curWeeks = this.changeWeek('next')
+        this.toNextWeek()
       }
     },
     beforeEnter (el, done) {

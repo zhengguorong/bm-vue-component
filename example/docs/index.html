@@ -111,7 +111,7 @@
       // 改变demo路由
       var hash = location.hash.substring(1);
       $(".demo-page").attr("src", "../index.html#" + hash)
-      if (hash === '/') hash = 'overwrite'
+      if (hash === '/' || hash === '') hash = 'overwrite'
       // 获取markdown内容
       $.get(hash + '.md', function (data) {
         var converter = new showdown.Converter({ tables: true })

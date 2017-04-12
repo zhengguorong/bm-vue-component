@@ -74,6 +74,7 @@ export default {
   },
   mounted () {
     this.dayList = this.getDayList(this.calendar.year, this.calendar.month)
+    this.$emit('cur-day-changed', this.calendar.year + '/' + this.calendar.month + '/' + this.calendar.day)
   },
   methods: {
     getDayList(year, month) {
@@ -109,10 +110,32 @@ export default {
       return tempArr    
     },
     setSelectedDay (day) {
-      this.$emit('cur-day-changed', day.formate)
+      this.$emit('cur-day-changed', day.formate || day)
       this.curDay.isToday = false
       day.isToday = true
       this.curDay = day
+    },
+    // 跳转到指定日期
+    toDate (date) {
+      // 判断目标日期是否在本月内
+      let targe = this.dayList.find( n => {
+        return n.formate === date
+      })
+      if (targe) {
+        this.setSelectedDay(targe)
+      } else {
+        // 切换月再设置选中日期
+        let year = new Date(date).getFullYear()
+        let month = new Date(date).getMonth() + 1
+        let day = new Date(date).getDate()
+        this.calendar.year = year
+        this.calendar.month = month
+        this.calendar.day = day
+        this.dayList = this.getDayList(year, month)
+        this.dayList.find( n => {
+          if (n.formate === date) this.setSelectedDay(n)
+        })
+      }
     },
     toNextMonth () {
       if (this.calendar.month === 12) {
