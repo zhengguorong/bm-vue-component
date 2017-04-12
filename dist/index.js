@@ -602,6 +602,7 @@ exports.default = {
   },
   mounted: function mounted() {
     this.dayList = this.getDayList(this.calendar.year, this.calendar.month);
+    this.$emit('cur-day-changed', this.calendar.year + '/' + this.calendar.month + '/' + this.calendar.day);
   },
 
   methods: {
@@ -649,10 +650,35 @@ exports.default = {
       return tempArr;
     },
     setSelectedDay: function setSelectedDay(day) {
-      this.$emit('cur-day-changed', day.formate);
+      this.$emit('cur-day-changed', day.formate || day);
       this.curDay.isToday = false;
       day.isToday = true;
       this.curDay = day;
+    },
+
+    // 跳转到指定日期
+    toDate: function toDate(date) {
+      var _this2 = this;
+
+      // 判断目标日期是否在本月内
+      var targe = this.dayList.find(function (n) {
+        return n.formate === date;
+      });
+      if (targe) {
+        this.setSelectedDay(targe);
+      } else {
+        // 切换月再设置选中日期
+        var year = new Date(date).getFullYear();
+        var month = new Date(date).getMonth() + 1;
+        var day = new Date(date).getDate();
+        this.calendar.year = year;
+        this.calendar.month = month;
+        this.calendar.day = day;
+        this.dayList = this.getDayList(year, month);
+        this.dayList.find(function (n) {
+          if (n.formate === date) _this2.setSelectedDay(n);
+        });
+      }
     },
     toNextMonth: function toNextMonth() {
       if (this.calendar.month === 12) {
@@ -736,7 +762,7 @@ Object.defineProperty(exports, "__esModule", {
 //
 
 exports.default = {
-  name: 'BMWeek',
+  name: 'bm-week',
   data: function data() {
     return {
       curWeeks: [],
@@ -744,23 +770,102 @@ exports.default = {
       action: 'cur'
     };
   },
+
+  props: {
+    // 默认选中日期
+    calendar: {
+      type: Object,
+      required: false,
+      default: function _default() {
+        return {
+          year: new Date().getFullYear(),
+          month: new Date().getMonth() + 1,
+          day: new Date().getDate()
+        };
+      }
+    },
+    // 事件提醒小黑点
+    events: {
+      type: Array,
+      require: false,
+      default: function _default() {
+        return [];
+      }
+    }
+  },
   mounted: function mounted() {
-    this.curWeeks = this.changeWeek('cur');
+    this.curWeeks = this.getDayList(this.calendar.year + '/' + this.calendar.month + '/' + this.calendar.day);
+    this.$emit('cur-day-changed', this.calendar.year + '/' + this.calendar.month + '/' + this.calendar.day);
   },
 
   watch: {
     curWeeks: function curWeeks(val) {
-      this.$emit('cur-week-changed', val);
+      this.$emit('cur-week-changed', val[0].formate);
+    },
+    events: function events(newEvents) {
+      // 设置小黑点
+      // 先把原有的小黑点清除
+      this.curWeeks.forEach(function (value) {
+        value.event = false;
+      });
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = newEvents[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var event = _step.value;
+          var _iteratorNormalCompletion2 = true;
+          var _didIteratorError2 = false;
+          var _iteratorError2 = undefined;
+
+          try {
+            for (var _iterator2 = this.curWeeks[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              var day = _step2.value;
+
+              if (day.formate === event) {
+                day.event = true;
+                break;
+              }
+            }
+          } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                _iterator2.return();
+              }
+            } finally {
+              if (_didIteratorError2) {
+                throw _iteratorError2;
+              }
+            }
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
     }
   },
   methods: {
     // 获取下一星期或者上一星期
-    changeWeek: function changeWeek(action) {
-      var lastDay = new Date();
-      if (action === 'cur') {
-        lastDay.setDate(lastDay.getDate() - lastDay.getDay() - 1);
-        lastDay = lastDay.getTime();
-      } else if (action === 'next') {
+    getDayList: function getDayList(action) {
+      var _this = this;
+
+      var lastDay = void 0;
+      if (action === 'next') {
         lastDay = this.curWeeks[6].time;
       } else if (action === 'pre') {
         lastDay = this.curWeeks[0].time - 8 * 24 * 3600 * 1000;
@@ -771,26 +876,34 @@ exports.default = {
         lastDay = toDate.getTime();
       }
       var weeks = [];
-      for (var i = 1; i <= 7; i++) {
+
+      var _loop = function _loop() {
         var nextDate = new Date(lastDay + i * 24 * 3600 * 1000);
         var formate = nextDate.getFullYear() + '/' + (nextDate.getMonth() + 1) + '/' + nextDate.getDate();
+        var index = _this.events.findIndex(function (value, index) {
+          return value === formate;
+        });
         var dateObj = {
           day: nextDate.getDate(),
           week: nextDate.getDay(),
           formate: formate,
-          isToday: formate === (this.curDay.formate || new Date().getFullYear() + '/' + (new Date().getMonth() + 1) + '/' + new Date().getDate()),
+          isToday: formate === (_this.curDay.formate || _this.calendar.year + '/' + _this.calendar.month + '/' + _this.calendar.day),
           time: nextDate.getTime(),
-          event: false
+          event: index > -1 ? true : false
         };
         if (dateObj.isToday) {
-          this.curDay = dateObj;
+          _this.curDay = dateObj;
         }
         weeks.push(dateObj);
+      };
+
+      for (var i = 1; i <= 7; i++) {
+        _loop();
       }
       return weeks;
     },
     toDate: function toDate(date) {
-      var _this = this;
+      var _this2 = this;
 
       // 判断目标日期是否在本周内
       var targe = this.curWeeks.find(function (n) {
@@ -800,25 +913,31 @@ exports.default = {
         this.setSelectedDay(targe);
       } else {
         // 切换周再设置选中日期
-        this.curWeeks = this.changeWeek(date);
+        this.curWeeks = this.getDayList(date);
         this.curWeeks.find(function (n) {
-          if (n.formate === date) _this.setSelectedDay(n);
+          if (n.formate === date) _this2.setSelectedDay(n);
         });
       }
     },
     setSelectedDay: function setSelectedDay(day) {
-      this.$emit('cur-day-changed', day);
+      this.$emit('cur-day-changed', day.formate || day);
       this.curDay.isToday = false;
       day.isToday = true;
       this.curDay = day;
     },
+    toNextWeek: function toNextWeek() {
+      this.action = 'next';
+      this.curWeeks = this.getDayList('next');
+    },
+    toPreWeek: function toPreWeek() {
+      this.curWeeks = this.getDayList('pre');
+      this.action = 'pre';
+    },
     swipe: function swipe(e) {
       if (e.deltaX > 0) {
-        this.curWeeks = this.changeWeek('pre');
-        this.action = 'pre';
+        this.toPreWeek();
       } else {
-        this.action = 'next';
-        this.curWeeks = this.changeWeek('next');
+        this.toNextWeek();
       }
     },
     beforeEnter: function beforeEnter(el, done) {
