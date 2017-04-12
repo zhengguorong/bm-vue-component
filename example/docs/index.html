@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,17 +8,22 @@
   <title>蓝月亮UI使用文档</title>
   <link rel="stylesheet" href="./github-markdown.css">
   <style>
-    html,body {
+    html,
+    body {
       height: 100%;
     }
+    
     body {
       margin: 0 0;
     }
-    ul,li {
+    
+    ul,
+    li {
       margin: 0 0;
       padding: 0 0;
       list-style-type: none;
     }
+    
     .category {
       float: left;
       width: 16%;
@@ -29,28 +35,36 @@
       height: 100%;
       overflow: scroll;
     }
+    
     .category li {
       padding: 8px;
     }
+    
     .category a {
       text-decoration: none;
       color: #656b79;
     }
+    
     .document {
       float: left;
       width: 50%;
       height: 100%;
+      overflow: scroll;
+      padding: 8px;
     }
+    
     .demo {
       float: right;
       height: 100%;
       width: 30%;
     }
+    
     .demo .wrap {
       height: 100%;
     }
+    
     .demo .phone {
-      padding:100px 16px;
+      padding: 100px 16px;
       margin: 20px 20px 0;
       height: 100%;
       background-repeat: no-repeat;
@@ -58,21 +72,24 @@
       box-sizing: border-box;
       background-image: url("http://mint-ui.github.io/docs/static/phone.5909f66.png")
     }
+    
     .demo .demo-page {
-      width:100%;
+      width: 100%;
       overflow: auto;
       height: 580px;
     }
   </style>
 </head>
+
 <body>
   <div class="category">
     <ul>
+      <li><a href="#/">说明</a></li>
       <li><a href="#calendar">日历选择器(calendar)</a></li>
       <li><a href="#week">周选择器(week)</a></li>
     </ul>
   </div>
-  <div class="document">
+  <div class="document markdown-body">
   </div>
   <div class="demo">
     <div class="wrap">
@@ -84,17 +101,25 @@
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.3/showdown.min.js"></script>
   <script>
-    $(window).bind('hashchange', function() {
+    $(window).bind('hashchange', function () {
+      getDocument();
+    });
+    $(function () {
+      getDocument();
+    })
+    function getDocument() {
       // 改变demo路由
       var hash = location.hash.substring(1);
-      $(".demo-page").attr("src","../index.html#"+hash)
+      $(".demo-page").attr("src", "../index.html#" + hash)
+      if (hash === '/') hash = 'overwrite'
       // 获取markdown内容
-      $.get(hash + '.md',function(data) {
-        var converter = new showdown.Converter({tables: true})
+      $.get(hash + '.md', function (data) {
+        var converter = new showdown.Converter({ tables: true })
         var html = converter.makeHtml(data);
         $(".document").html(html)
       })
-    });
+    }
   </script>
 </body>
+
 </html>
