@@ -80,7 +80,7 @@ export default {
     getDayList(year, month) {
       // 计算1号时间戳
       let firstDay = new Date(year + '/' + month + '/01')
-      let startTimestamp = firstDay-1000*60*60*24*firstDay.getDay() // 减去当前1号所在星期的天数
+      let startTimestamp = firstDay-1000*60*60*24*firstDay.getDay()
       let item, status, tempArr = [], tempItem, now = new Date()
       for (let i = 0 ; i < 42 ; i++) {
           item = new Date(startTimestamp + i*1000*60*60*24)
@@ -119,7 +119,7 @@ export default {
     toDate (date) {
       // 判断目标日期是否在本月内
       let targe = this.dayList.find( n => {
-        return n.formate === date
+        return n.formate === date && n.status === 1
       })
       if (targe) {
         this.setSelectedDay(targe)
