@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -139,9 +139,9 @@ __webpack_require__(8)
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(5),
+  __webpack_require__(10),
   /* template */
-  __webpack_require__(11),
+  __webpack_require__(5),
   /* scopeId */
   "data-v-3574061e",
   /* cssModules */
@@ -161,9 +161,9 @@ __webpack_require__(9)
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(6),
+  __webpack_require__(11),
   /* template */
-  __webpack_require__(12),
+  __webpack_require__(6),
   /* scopeId */
   "data-v-625c2144",
   /* cssModules */
@@ -178,7 +178,7 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
-   true ? factory(__webpack_require__(10)) :
+   true ? factory(__webpack_require__(7)) :
   typeof define === 'function' && define.amd ? define(['hammerjs'], factory) :
   (factory(global.Hammer));
 }(this, (function (Hammer) { 'use strict';
@@ -474,546 +474,150 @@ module.exports = function(module) {
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-exports.default = {
-  name: 'bm-calendar',
-  data: function data() {
-    return {
-      dayList: [],
-      curDay: {},
-      action: 'cur' // 用来记录手势，是前进还是后退，以便完成动画
-    };
-  },
-
-  props: {
-    calendar: {
-      type: Object,
-      required: false,
-      default: function _default() {
-        return {
-          year: new Date().getFullYear(),
-          month: new Date().getMonth() + 1,
-          day: new Date().getDate()
-        };
-      }
-    },
-    events: {
-      type: Array,
-      require: false,
-      default: function _default() {
-        return [];
-      }
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-touch', {
+    on: {
+      "swipe": _vm.swipe
     }
-  },
-  watch: {
-    events: function events(newEvents) {
-      // 设置小黑点
-      // 先把原有的小黑点清除
-      this.dayList.forEach(function (value) {
-        value.event = false;
-      });
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = newEvents[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var event = _step.value;
-          var _iteratorNormalCompletion2 = true;
-          var _didIteratorError2 = false;
-          var _iteratorError2 = undefined;
-
-          try {
-            for (var _iterator2 = this.dayList[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-              var day = _step2.value;
-
-              if (day.formate === event) {
-                day.event = true;
-                break;
-              }
-            }
-          } catch (err) {
-            _didIteratorError2 = true;
-            _iteratorError2 = err;
-          } finally {
-            try {
-              if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                _iterator2.return();
-              }
-            } finally {
-              if (_didIteratorError2) {
-                throw _iteratorError2;
-              }
-            }
-          }
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
+  }, [_c('div', {
+    staticClass: "header"
+  }, [_c('div', {
+    staticClass: "left",
+    on: {
+      "click": _vm.toPreMonth
     }
-  },
-  mounted: function mounted() {
-    this.dayList = this.getDayList(this.calendar.year, this.calendar.month);
-    this.$emit('cur-day-changed', this.calendar.year + '/' + this.calendar.month + '/' + this.calendar.day);
-  },
-
-  methods: {
-    getDayList: function getDayList(year, month) {
-      var _this = this;
-
-      // 计算1号时间戳
-      var firstDay = new Date(year + '/' + month + '/01');
-      var startTimestamp = firstDay - 1000 * 60 * 60 * 24 * firstDay.getDay();
-      var item = void 0,
-          status = void 0,
-          tempArr = [],
-          tempItem = void 0,
-          now = new Date();
-
-      var _loop = function _loop(i) {
-        item = new Date(startTimestamp + i * 1000 * 60 * 60 * 24);
-        if (parseInt(month) === item.getMonth() + 1) {
-          status = 1;
-        } else {
-          status = 0;
-        }
-        var formate = item.getFullYear() + '/' + (item.getMonth() + 1) + '/' + item.getDate();
-        var index = _this.events.findIndex(function (value, index) {
-          return value === formate;
-        });
-        tempItem = {
-          formate: item.getFullYear() + '/' + (item.getMonth() + 1) + '/' + item.getDate(),
-          day: item.getDate(),
-          week: item.getDay(),
-          time: item.getTime(),
-          isToday: formate === (_this.curDay.formate || _this.calendar.year + '/' + _this.calendar.month + '/' + _this.calendar.day),
-          status: status,
-          event: index > -1 ? true : false
-        };
-        if (tempItem.isToday) {
-          _this.curDay = tempItem;
-        }
-        tempArr.push(tempItem);
-      };
-
-      for (var i = 0; i < 42; i++) {
-        _loop(i);
-      }
-      return tempArr;
-    },
-    setSelectedDay: function setSelectedDay(day) {
-      this.$emit('cur-day-changed', day.formate || day);
-      this.curDay.isToday = false;
-      day.isToday = true;
-      this.curDay = day;
-    },
-
-    // 跳转到指定日期
-    toDate: function toDate(date) {
-      var _this2 = this;
-
-      // 判断目标日期是否在本月内
-      var targe = this.dayList.find(function (n) {
-        return n.formate === date && n.status === 1;
-      });
-      if (targe) {
-        this.setSelectedDay(targe);
-      } else {
-        // 切换月再设置选中日期
-        var year = new Date(date).getFullYear();
-        var month = new Date(date).getMonth() + 1;
-        var day = new Date(date).getDate();
-        this.calendar.year = year;
-        this.calendar.month = month;
-        this.calendar.day = day;
-        this.dayList = this.getDayList(year, month);
-        this.dayList.find(function (n) {
-          if (n.formate === date) _this2.setSelectedDay(n);
-        });
-      }
-    },
-    toNextMonth: function toNextMonth() {
-      if (this.calendar.month === 12) {
-        this.calendar.year = parseInt(this.calendar.year) + 1;
-        this.calendar.month = 1;
-      } else {
-        this.calendar.month = parseInt(this.calendar.month) + 1;
-      }
-      this.action = 'next';
-      this.dayList = this.getDayList(this.calendar.year, this.calendar.month);
-      this.$emit('cur-month-changed', this.calendar.year + '/' + this.calendar.month + '/01');
-    },
-    toPreMonth: function toPreMonth() {
-      if (this.calendar.month === 1) {
-        this.calendar.year = parseInt(this.calendar.year) - 1;
-        this.calendar.month = 12;
-      } else {
-        this.calendar.month = parseInt(this.calendar.month) - 1;
-      }
-      this.action = 'pre';
-      this.dayList = this.getDayList(this.calendar.year, this.calendar.month);
-      this.$emit('cur-month-changed', this.calendar.year + '/' + this.calendar.month + '/01');
-    },
-    swipe: function swipe(e) {
-      if (e.deltaX > 0) {
-        this.toPreMonth();
-      } else {
-        this.toNextMonth();
-      }
-    },
-    beforeEnter: function beforeEnter(el, done) {
-      el.style.opacity = 0;
-      el.style.transform = 'translateX(' + (this.action === 'next' ? 50 : -50) + 'px)';
-      el.style.transition = 'all .5s';
-    },
-    enter: function enter(el, done) {
-      setTimeout(function () {
-        el.style.opacity = 1;
-        el.style.transform = 'translateX(0px)';
-      }, 0);
-    },
-    leave: function leave(el, done) {
-      el.style.display = 'none';
+  }, [_vm._v("<")]), _vm._v(" "), _c('div', {
+    staticClass: "title"
+  }, [_vm._v(_vm._s(_vm.calendar.year) + " 年 " + _vm._s(_vm.calendar.month) + " 月")]), _vm._v(" "), _c('div', {
+    staticClass: "right",
+    on: {
+      "click": _vm.toNextMonth
     }
-  }
-};
+  }, [_vm._v(">")])]), _vm._v(" "), _c('div', {
+    staticClass: "weeks"
+  }, [_c('span', {
+    staticClass: "item hday"
+  }, [_vm._v("日")]), _c('span', {
+    staticClass: "item"
+  }, [_vm._v("一")]), _c('span', {
+    staticClass: "item"
+  }, [_vm._v("二")]), _c('span', {
+    staticClass: "item"
+  }, [_vm._v("三")]), _c('span', {
+    staticClass: "item"
+  }, [_vm._v("四")]), _c('span', {
+    staticClass: "item"
+  }, [_vm._v("五")]), _c('span', {
+    staticClass: "item hday"
+  }, [_vm._v("六")])]), _vm._v(" "), _c('div', {
+    staticClass: "dates"
+  }, [_c('transition-group', {
+    attrs: {
+      "name": "list",
+      "tag": "div",
+      "css": false
+    },
+    on: {
+      "before-enter": _vm.beforeEnter,
+      "enter": _vm.enter,
+      "leave": _vm.leave
+    }
+  }, _vm._l((_vm.dayList), function(day, index) {
+    return _c('span', {
+      key: day,
+      staticClass: "item",
+      on: {
+        "click": function($event) {
+          _vm.setSelectedDay(day)
+        }
+      }
+    }, [_c('div', {
+      staticClass: "date-num",
+      class: {
+        'hday': day.week === 6 || day.week === 0
+      }
+    }, [_c('div', {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: (day.status),
+        expression: "day.status"
+      }],
+      class: {
+        'is-today': day.isToday
+      }
+    }, [_vm._v(_vm._s(day.day))]), _vm._v(" "), (day.event && day.status) ? _c('div', {
+      staticClass: "event"
+    }) : _vm._e()])])
+  }))], 1)])
+},staticRenderFns: []}
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-exports.default = {
-  name: 'bm-week',
-  data: function data() {
-    return {
-      curWeeks: [],
-      curDay: {},
-      action: 'cur'
-    };
-  },
-
-  props: {
-    // 默认选中日期
-    calendar: {
-      type: Object,
-      required: false,
-      default: function _default() {
-        return {
-          year: new Date().getFullYear(),
-          month: new Date().getMonth() + 1,
-          day: new Date().getDate()
-        };
-      }
-    },
-    // 事件提醒小黑点
-    events: {
-      type: Array,
-      require: false,
-      default: function _default() {
-        return [];
-      }
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-touch', {
+    on: {
+      "swipe": _vm.swipe
     }
-  },
-  mounted: function mounted() {
-    this.curWeeks = this.getDayList(this.calendar.year + '/' + this.calendar.month + '/' + this.calendar.day);
-    this.$emit('cur-day-changed', this.calendar.year + '/' + this.calendar.month + '/' + this.calendar.day);
-  },
-
-  watch: {
-    curWeeks: function curWeeks(val) {
-      this.$emit('cur-week-changed', val[0].formate);
+  }, [_c('div', {
+    staticClass: "weeks"
+  }, [_c('span', {
+    staticClass: "item hday"
+  }, [_vm._v("日")]), _c('span', {
+    staticClass: "item"
+  }, [_vm._v("一")]), _c('span', {
+    staticClass: "item"
+  }, [_vm._v("二")]), _c('span', {
+    staticClass: "item"
+  }, [_vm._v("三")]), _c('span', {
+    staticClass: "item"
+  }, [_vm._v("四")]), _c('span', {
+    staticClass: "item"
+  }, [_vm._v("五")]), _c('span', {
+    staticClass: "item hday"
+  }, [_vm._v("六")])]), _vm._v(" "), _c('div', {
+    staticClass: "dates"
+  }, [_c('transition-group', {
+    attrs: {
+      "name": "list",
+      "tag": "div",
+      "css": false
     },
-    events: function events(newEvents) {
-      // 设置小黑点
-      // 先把原有的小黑点清除
-      this.curWeeks.forEach(function (value) {
-        value.event = false;
-      });
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = newEvents[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var event = _step.value;
-          var _iteratorNormalCompletion2 = true;
-          var _didIteratorError2 = false;
-          var _iteratorError2 = undefined;
-
-          try {
-            for (var _iterator2 = this.curWeeks[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-              var day = _step2.value;
-
-              if (day.formate === event) {
-                day.event = true;
-                break;
-              }
-            }
-          } catch (err) {
-            _didIteratorError2 = true;
-            _iteratorError2 = err;
-          } finally {
-            try {
-              if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                _iterator2.return();
-              }
-            } finally {
-              if (_didIteratorError2) {
-                throw _iteratorError2;
-              }
-            }
-          }
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
+    on: {
+      "before-enter": _vm.beforeEnter,
+      "enter": _vm.enter,
+      "leave": _vm.leave
+    }
+  }, _vm._l((_vm.curWeeks), function(day, index) {
+    return _c('span', {
+      key: day,
+      staticClass: "item",
+      on: {
+        "click": function($event) {
+          _vm.setSelectedDay(day)
         }
       }
-    }
-  },
-  methods: {
-    // 获取下一星期或者上一星期
-    getDayList: function getDayList(action) {
-      var _this = this;
-
-      var lastDay = void 0;
-      if (action === 'next') {
-        lastDay = this.curWeeks[6].time;
-      } else if (action === 'pre') {
-        lastDay = this.curWeeks[0].time - 8 * 24 * 3600 * 1000;
-      } else {
-        // 传递日期 2017/3/14
-        var toDate = new Date(action);
-        toDate.setDate(toDate.getDate() - toDate.getDay() - 1); // 设置本周第一天
-        lastDay = toDate.getTime();
+    }, [_c('div', {
+      staticClass: "date-num",
+      class: {
+        'hday': index === 0 || index === 6
       }
-      var weeks = [];
-
-      var _loop = function _loop() {
-        var nextDate = new Date(lastDay + i * 24 * 3600 * 1000);
-        var formate = nextDate.getFullYear() + '/' + (nextDate.getMonth() + 1) + '/' + nextDate.getDate();
-        var index = _this.events.findIndex(function (value, index) {
-          return value === formate;
-        });
-        var dateObj = {
-          day: nextDate.getDate(),
-          week: nextDate.getDay(),
-          formate: formate,
-          isToday: formate === (_this.curDay.formate || _this.calendar.year + '/' + _this.calendar.month + '/' + _this.calendar.day),
-          time: nextDate.getTime(),
-          event: index > -1 ? true : false
-        };
-        if (dateObj.isToday) {
-          _this.curDay = dateObj;
-        }
-        weeks.push(dateObj);
-      };
-
-      for (var i = 1; i <= 7; i++) {
-        _loop();
+    }, [_c('div', {
+      class: {
+        'is-today': day.isToday
       }
-      return weeks;
-    },
-    toDate: function toDate(date) {
-      var _this2 = this;
-
-      // 判断目标日期是否在本周内
-      var targe = this.curWeeks.find(function (n) {
-        return n.formate === date;
-      });
-      if (targe) {
-        this.setSelectedDay(targe);
-      } else {
-        // 切换周再设置选中日期
-        this.curWeeks = this.getDayList(date);
-        this.curWeeks.find(function (n) {
-          if (n.formate === date) _this2.setSelectedDay(n);
-        });
-      }
-    },
-    setSelectedDay: function setSelectedDay(day) {
-      this.$emit('cur-day-changed', day.formate || day);
-      this.curDay.isToday = false;
-      day.isToday = true;
-      this.curDay = day;
-    },
-    toNextWeek: function toNextWeek() {
-      this.action = 'next';
-      this.curWeeks = this.getDayList('next');
-    },
-    toPreWeek: function toPreWeek() {
-      this.curWeeks = this.getDayList('pre');
-      this.action = 'pre';
-    },
-    swipe: function swipe(e) {
-      if (e.deltaX > 0) {
-        this.toPreWeek();
-      } else {
-        this.toNextWeek();
-      }
-    },
-    beforeEnter: function beforeEnter(el, done) {
-      el.style.opacity = 0;
-      el.style.transform = 'translateX(' + (this.action === 'next' ? 50 : -50) + 'px)';
-      el.style.transition = 'all .5s';
-    },
-    enter: function enter(el, done) {
-      setTimeout(function () {
-        el.style.opacity = 1;
-        el.style.transform = 'translateX(0px)';
-      }, 0);
-    },
-    leave: function leave(el, done) {
-      el.style.display = 'none';
-    }
-  }
-};
+    }, [_vm._v(_vm._s(day.day))]), _vm._v(" "), (day.event) ? _c('div', {
+      staticClass: "event"
+    }) : _vm._e()])])
+  }))], 1)])
+},staticRenderFns: []}
 
 /***/ }),
 /* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _week = __webpack_require__(2);
-
-var _week2 = _interopRequireDefault(_week);
-
-var _calendar = __webpack_require__(1);
-
-var _calendar2 = _interopRequireDefault(_calendar);
-
-var _vueTouch = __webpack_require__(3);
-
-var _vueTouch2 = _interopRequireDefault(_vueTouch);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function install(Vue) {
-  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-  Vue.use(_vueTouch2.default);
-  Vue.component(_week2.default.name, _week2.default);
-  Vue.component(_calendar2.default.name, _calendar2.default);
-}
-
-exports.default = install;
-
-
-if (( false ? 'undefined' : _typeof(module)) === 'object' && module.exports) {
-  module.exports.install = install;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/*! Hammer.JS - v2.0.7 - 2016-04-22
@@ -3663,148 +3267,532 @@ if (true) {
 
 
 /***/ }),
-/* 11 */
+/* 8 */
 /***/ (function(module, exports) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-touch', {
-    on: {
-      "swipe": _vm.swipe
-    }
-  }, [_c('div', {
-    staticClass: "header"
-  }, [_c('div', {
-    staticClass: "left",
-    on: {
-      "click": _vm.toPreMonth
-    }
-  }, [_vm._v("<")]), _vm._v(" "), _c('div', {
-    staticClass: "title"
-  }, [_vm._v(_vm._s(_vm.calendar.year) + " 年 " + _vm._s(_vm.calendar.month) + " 月")]), _vm._v(" "), _c('div', {
-    staticClass: "right",
-    on: {
-      "click": _vm.toNextMonth
-    }
-  }, [_vm._v(">")])]), _vm._v(" "), _c('div', {
-    staticClass: "weeks"
-  }, [_c('span', {
-    staticClass: "item hday"
-  }, [_vm._v("日")]), _vm._v(" "), _c('span', {
-    staticClass: "item"
-  }, [_vm._v("一")]), _vm._v(" "), _c('span', {
-    staticClass: "item"
-  }, [_vm._v("二")]), _vm._v(" "), _c('span', {
-    staticClass: "item"
-  }, [_vm._v("三")]), _vm._v(" "), _c('span', {
-    staticClass: "item"
-  }, [_vm._v("四")]), _vm._v(" "), _c('span', {
-    staticClass: "item"
-  }, [_vm._v("五")]), _vm._v(" "), _c('span', {
-    staticClass: "item hday"
-  }, [_vm._v("六")])]), _vm._v(" "), _c('div', {
-    staticClass: "dates"
-  }, [_c('transition-group', {
-    attrs: {
-      "name": "list",
-      "tag": "div",
-      "css": false
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+  name: 'bm-calendar',
+  data: function data() {
+    return {
+      dayList: [],
+      curDay: {},
+      action: 'cur' // 用来记录手势，是前进还是后退，以便完成动画
+    };
+  },
+
+  props: {
+    calendar: {
+      type: Object,
+      required: false,
+      default: function _default() {
+        return {
+          year: new Date().getFullYear(),
+          month: new Date().getMonth() + 1,
+          day: new Date().getDate()
+        };
+      }
     },
-    on: {
-      "before-enter": _vm.beforeEnter,
-      "enter": _vm.enter,
-      "leave": _vm.leave
+    events: {
+      type: Array,
+      require: false,
+      default: function _default() {
+        return [];
+      }
     }
-  }, _vm._l((_vm.dayList), function(day, index) {
-    return _c('span', {
-      key: day,
-      staticClass: "item",
-      on: {
-        "click": function($event) {
-          _vm.setSelectedDay(day)
+  },
+  watch: {
+    events: function events(newEvents) {
+      // 设置小黑点
+      // 先把原有的小黑点清除
+      this.dayList.forEach(function (value) {
+        value.event = false;
+      });
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = newEvents[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var event = _step.value;
+          var _iteratorNormalCompletion2 = true;
+          var _didIteratorError2 = false;
+          var _iteratorError2 = undefined;
+
+          try {
+            for (var _iterator2 = this.dayList[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              var day = _step2.value;
+
+              if (day.formate === event) {
+                day.event = true;
+                break;
+              }
+            }
+          } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                _iterator2.return();
+              }
+            } finally {
+              if (_didIteratorError2) {
+                throw _iteratorError2;
+              }
+            }
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
         }
       }
-    }, [_c('div', {
-      staticClass: "date-num",
-      class: {
-        'hday': day.week === 6 || day.week === 0
+    }
+  },
+  mounted: function mounted() {
+    this.dayList = this.getDayList(this.calendar.year, this.calendar.month);
+    this.$emit('cur-day-changed', this.calendar.year + '/' + this.calendar.month + '/' + this.calendar.day);
+  },
+
+  methods: {
+    getDayList: function getDayList(year, month) {
+      var _this = this;
+
+      // 计算1号时间戳
+      var firstDay = new Date(year + '/' + month + '/01');
+      var startTimestamp = firstDay - 1000 * 60 * 60 * 24 * firstDay.getDay();
+      var item = void 0,
+          status = void 0,
+          tempArr = [],
+          tempItem = void 0,
+          now = new Date();
+
+      var _loop = function _loop(i) {
+        item = new Date(startTimestamp + i * 1000 * 60 * 60 * 24);
+        if (parseInt(month) === item.getMonth() + 1) {
+          status = 1;
+        } else {
+          status = 0;
+        }
+        var formate = item.getFullYear() + '/' + (item.getMonth() + 1) + '/' + item.getDate();
+        var index = _this.events.findIndex(function (value, index) {
+          return value === formate;
+        });
+        tempItem = {
+          formate: item.getFullYear() + '/' + (item.getMonth() + 1) + '/' + item.getDate(),
+          day: item.getDate(),
+          week: item.getDay(),
+          time: item.getTime(),
+          isToday: formate === (_this.curDay.formate || _this.calendar.year + '/' + _this.calendar.month + '/' + _this.calendar.day),
+          status: status,
+          event: index > -1 ? true : false
+        };
+        if (tempItem.isToday) {
+          _this.curDay = tempItem;
+        }
+        tempArr.push(tempItem);
+      };
+
+      for (var i = 0; i < 42; i++) {
+        _loop(i);
       }
-    }, [_c('div', {
-      directives: [{
-        name: "show",
-        rawName: "v-show",
-        value: (day.status),
-        expression: "day.status"
-      }],
-      class: {
-        'is-today': day.isToday
+      return tempArr;
+    },
+    setSelectedDay: function setSelectedDay(day) {
+      this.$emit('cur-day-changed', day.formate || day);
+      this.curDay.isToday = false;
+      day.isToday = true;
+      this.curDay = day;
+    },
+
+    // 跳转到指定日期
+    toDate: function toDate(date) {
+      var _this2 = this;
+
+      // 判断目标日期是否在本月内
+      var targe = this.dayList.find(function (n) {
+        return n.formate === date && n.status === 1;
+      });
+      if (targe) {
+        this.setSelectedDay(targe);
+      } else {
+        // 切换月再设置选中日期
+        var year = new Date(date).getFullYear();
+        var month = new Date(date).getMonth() + 1;
+        var day = new Date(date).getDate();
+        this.calendar.year = year;
+        this.calendar.month = month;
+        this.calendar.day = day;
+        this.dayList = this.getDayList(year, month);
+        this.dayList.find(function (n) {
+          if (n.formate === date) _this2.setSelectedDay(n);
+        });
       }
-    }, [_vm._v(_vm._s(day.day))]), _vm._v(" "), (day.event && day.status) ? _c('div', {
-      staticClass: "event"
-    }) : _vm._e()])])
-  }))], 1)])
-},staticRenderFns: []}
+    },
+    toNextMonth: function toNextMonth() {
+      if (this.calendar.month === 12) {
+        this.calendar.year = parseInt(this.calendar.year) + 1;
+        this.calendar.month = 1;
+      } else {
+        this.calendar.month = parseInt(this.calendar.month) + 1;
+      }
+      this.action = 'next';
+      this.dayList = this.getDayList(this.calendar.year, this.calendar.month);
+      this.$emit('cur-month-changed', this.calendar.year + '/' + this.calendar.month + '/01');
+    },
+    toPreMonth: function toPreMonth() {
+      if (this.calendar.month === 1) {
+        this.calendar.year = parseInt(this.calendar.year) - 1;
+        this.calendar.month = 12;
+      } else {
+        this.calendar.month = parseInt(this.calendar.month) - 1;
+      }
+      this.action = 'pre';
+      this.dayList = this.getDayList(this.calendar.year, this.calendar.month);
+      this.$emit('cur-month-changed', this.calendar.year + '/' + this.calendar.month + '/01');
+    },
+    swipe: function swipe(e) {
+      if (e.deltaX > 0) {
+        this.toPreMonth();
+      } else {
+        this.toNextMonth();
+      }
+    },
+    beforeEnter: function beforeEnter(el, done) {
+      el.style.opacity = 0;
+      el.style.transform = 'translateX(' + (this.action === 'next' ? 50 : -50) + 'px)';
+      el.style.transition = 'all .5s';
+    },
+    enter: function enter(el, done) {
+      setTimeout(function () {
+        el.style.opacity = 1;
+        el.style.transform = 'translateX(0px)';
+      }, 0);
+    },
+    leave: function leave(el, done) {
+      el.style.display = 'none';
+    }
+  }
+};
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+  name: 'bm-week',
+  data: function data() {
+    return {
+      curWeeks: [],
+      curDay: {},
+      action: 'cur'
+    };
+  },
+
+  props: {
+    // 默认选中日期
+    calendar: {
+      type: Object,
+      required: false,
+      default: function _default() {
+        return {
+          year: new Date().getFullYear(),
+          month: new Date().getMonth() + 1,
+          day: new Date().getDate()
+        };
+      }
+    },
+    // 事件提醒小黑点
+    events: {
+      type: Array,
+      require: false,
+      default: function _default() {
+        return [];
+      }
+    }
+  },
+  mounted: function mounted() {
+    this.curWeeks = this.getDayList(this.calendar.year + '/' + this.calendar.month + '/' + this.calendar.day);
+    this.$emit('cur-day-changed', this.calendar.year + '/' + this.calendar.month + '/' + this.calendar.day);
+  },
+
+  watch: {
+    curWeeks: function curWeeks(val) {
+      this.$emit('cur-week-changed', val[0].formate);
+    },
+    events: function events(newEvents) {
+      // 设置小黑点
+      // 先把原有的小黑点清除
+      this.curWeeks.forEach(function (value) {
+        value.event = false;
+      });
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = newEvents[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var event = _step.value;
+          var _iteratorNormalCompletion2 = true;
+          var _didIteratorError2 = false;
+          var _iteratorError2 = undefined;
+
+          try {
+            for (var _iterator2 = this.curWeeks[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              var day = _step2.value;
+
+              if (day.formate === event) {
+                day.event = true;
+                break;
+              }
+            }
+          } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                _iterator2.return();
+              }
+            } finally {
+              if (_didIteratorError2) {
+                throw _iteratorError2;
+              }
+            }
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+    }
+  },
+  methods: {
+    // 获取下一星期或者上一星期
+    getDayList: function getDayList(action) {
+      var _this = this;
+
+      var lastDay = void 0;
+      if (action === 'next') {
+        lastDay = this.curWeeks[6].time;
+      } else if (action === 'pre') {
+        lastDay = this.curWeeks[0].time - 8 * 24 * 3600 * 1000;
+      } else {
+        // 传递日期 2017/3/14
+        var toDate = new Date(action);
+        toDate.setDate(toDate.getDate() - toDate.getDay() - 1); // 设置本周第一天
+        lastDay = toDate.getTime();
+      }
+      var weeks = [];
+
+      var _loop = function _loop() {
+        var nextDate = new Date(lastDay + i * 24 * 3600 * 1000);
+        var formate = nextDate.getFullYear() + '/' + (nextDate.getMonth() + 1) + '/' + nextDate.getDate();
+        var index = _this.events.findIndex(function (value, index) {
+          return value === formate;
+        });
+        var dateObj = {
+          day: nextDate.getDate(),
+          week: nextDate.getDay(),
+          formate: formate,
+          isToday: formate === (_this.curDay.formate || _this.calendar.year + '/' + _this.calendar.month + '/' + _this.calendar.day),
+          time: nextDate.getTime(),
+          event: index > -1 ? true : false
+        };
+        if (dateObj.isToday) {
+          _this.curDay = dateObj;
+        }
+        weeks.push(dateObj);
+      };
+
+      for (var i = 1; i <= 7; i++) {
+        _loop();
+      }
+      return weeks;
+    },
+    toDate: function toDate(date) {
+      var _this2 = this;
+
+      // 判断目标日期是否在本周内
+      var targe = this.curWeeks.find(function (n) {
+        return n.formate === date;
+      });
+      if (targe) {
+        this.setSelectedDay(targe);
+      } else {
+        // 切换周再设置选中日期
+        this.curWeeks = this.getDayList(date);
+        this.curWeeks.find(function (n) {
+          if (n.formate === date) _this2.setSelectedDay(n);
+        });
+      }
+    },
+    setSelectedDay: function setSelectedDay(day) {
+      this.$emit('cur-day-changed', day.formate || day);
+      this.curDay.isToday = false;
+      day.isToday = true;
+      this.curDay = day;
+    },
+    toNextWeek: function toNextWeek() {
+      this.action = 'next';
+      this.curWeeks = this.getDayList('next');
+    },
+    toPreWeek: function toPreWeek() {
+      this.curWeeks = this.getDayList('pre');
+      this.action = 'pre';
+    },
+    swipe: function swipe(e) {
+      if (e.deltaX > 0) {
+        this.toPreWeek();
+      } else {
+        this.toNextWeek();
+      }
+    },
+    beforeEnter: function beforeEnter(el, done) {
+      el.style.opacity = 0;
+      el.style.transform = 'translateX(' + (this.action === 'next' ? 50 : -50) + 'px)';
+      el.style.transition = 'all .5s';
+    },
+    enter: function enter(el, done) {
+      setTimeout(function () {
+        el.style.opacity = 1;
+        el.style.transform = 'translateX(0px)';
+      }, 0);
+    },
+    leave: function leave(el, done) {
+      el.style.display = 'none';
+    }
+  }
+};
 
 /***/ }),
 /* 12 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-touch', {
-    on: {
-      "swipe": _vm.swipe
-    }
-  }, [_c('div', {
-    staticClass: "weeks"
-  }, [_c('span', {
-    staticClass: "item hday"
-  }, [_vm._v("日")]), _vm._v(" "), _c('span', {
-    staticClass: "item"
-  }, [_vm._v("一")]), _vm._v(" "), _c('span', {
-    staticClass: "item"
-  }, [_vm._v("二")]), _vm._v(" "), _c('span', {
-    staticClass: "item"
-  }, [_vm._v("三")]), _vm._v(" "), _c('span', {
-    staticClass: "item"
-  }, [_vm._v("四")]), _vm._v(" "), _c('span', {
-    staticClass: "item"
-  }, [_vm._v("五")]), _vm._v(" "), _c('span', {
-    staticClass: "item hday"
-  }, [_vm._v("六")])]), _vm._v(" "), _c('div', {
-    staticClass: "dates"
-  }, [_c('transition-group', {
-    attrs: {
-      "name": "list",
-      "tag": "div",
-      "css": false
-    },
-    on: {
-      "before-enter": _vm.beforeEnter,
-      "enter": _vm.enter,
-      "leave": _vm.leave
-    }
-  }, _vm._l((_vm.curWeeks), function(day, index) {
-    return _c('span', {
-      key: day,
-      staticClass: "item",
-      on: {
-        "click": function($event) {
-          _vm.setSelectedDay(day)
-        }
-      }
-    }, [_c('div', {
-      staticClass: "date-num",
-      class: {
-        'hday': index === 0 || index === 6
-      }
-    }, [_c('div', {
-      class: {
-        'is-today': day.isToday
-      }
-    }, [_vm._v(_vm._s(day.day))]), _vm._v(" "), (day.event) ? _c('div', {
-      staticClass: "event"
-    }) : _vm._e()])])
-  }))], 1)])
-},staticRenderFns: []}
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _week = __webpack_require__(2);
+
+var _week2 = _interopRequireDefault(_week);
+
+var _calendar = __webpack_require__(1);
+
+var _calendar2 = _interopRequireDefault(_calendar);
+
+var _vueTouch = __webpack_require__(3);
+
+var _vueTouch2 = _interopRequireDefault(_vueTouch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function install(Vue) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  Vue.use(_vueTouch2.default);
+  Vue.component(_week2.default.name, _week2.default);
+  Vue.component(_calendar2.default.name, _calendar2.default);
+}
+
+exports.default = install;
+
+
+if (( false ? 'undefined' : _typeof(module)) === 'object' && module.exports) {
+  module.exports.install = install;
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ })
 /******/ ]);
