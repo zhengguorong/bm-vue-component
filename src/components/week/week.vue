@@ -1,13 +1,7 @@
 <template>
     <v-touch v-on:swipe="swipe">
     <div class="weeks">
-      <span class="item hday">日</span>
-      <span class="item">一</span>
-      <span class="item">二</span>
-      <span class="item">三</span>
-      <span class="item">四</span>
-      <span class="item">五</span>
-      <span class="item hday">六</span>
+      <span class="item hday">日</span><span class="item">一</span><span class="item">二</span><span class="item">三</span><span class="item">四</span><span class="item">五</span><span class="item hday">六</span>
     </div>
     <div class="dates">
     <transition-group name="list" tag="div" :css="false" @before-enter="beforeEnter" @enter="enter" @leave="leave">
@@ -181,18 +175,16 @@ export default {
   font-size: 20px;
   width: 100%;
   overflow: hidden;
-  display: flex;
 }
 .dates .item {
   line-height: 20px;
 }
 .dates>div {
-  display: flex;
   width: 100%;
 }
 .weeks span,.dates span {
-  flex:1;
-  display: block;
+  width:14.2%;
+  display: inline-block;
 }
 .is-today {
   background: #1EB8FF;
